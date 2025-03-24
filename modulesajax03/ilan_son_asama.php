@@ -1,0 +1,47 @@
+<?php
+if($hesap->id == ''){ 
+die();
+}
+
+$id			= $gvn->rakam($_GET["id"]);
+
+$kontrol	= $db->prepare("SELECT * FROM sayfalar WHERE site_id_555=999 AND tipi=4 AND id=? AND ekleme=0");
+$kontrol->execute(array($id));
+if($kontrol->rowCount() < 1){
+	die();
+}
+$snc		= $kontrol->fetch(PDO::FETCH_OBJ);
+
+
+$multi			= $db->query("SELECT id,ilan_no FROM sayfalar WHERE site_id_555=999 AND ilan_no=".$snc->ilan_no." ORDER BY id ASC");
+$multict		= $multi->rowCount();
+$multif			= $multi->fetch(PDO::FETCH_OBJ);
+$multidids		= $db->query("SELECT GROUP_CONCAT(id SEPARATOR ',') AS ids FROM sayfalar WHERE site_id_555=999 AND ilan_no=".$snc->ilan_no)->fetch(PDO::FETCH_OBJ)->ids;
+$mulid 			= ($multict>1 && $snc->id == $multif->id) ? " IN(".$multidids.")" : "=".$snc->id;
+$mulidx 			= ($multict>1) ? " IN(".$multidids.")" : "=".$snc->id;
+
+
+$ilan_aktifet	= ($hesap->tipi==1) ? 1 : $hesap->ilan_aktifet;
+$acc			= $db->query("SELECT id,kid,ilan_aktifet FROM hesaplar WHERE site_id_555=999 AND id=".$snc->acid)->fetch(PDO::FETCH_OBJ);
+$kid			= $acc->kid;
+if($snc->acid != $hesap->id AND $hesap->id != $kid){
+die();
+}
+$kurumsal		= $db->prepare("SELECT ilan_aktifet FROM hesaplar WHERE site_id_555=999 AND id=?");
+$kurumsal->execute(array($kid));
+if($kurumsal->rowCount()>0){
+$ilan_aktifet	= ($kurumsal->ilan_aktifet == 0) ? $ilan_aktifet : $kurumsal->ilan_aktifet;
+}
+
+$adsoyad	= $hesap->adi.' '.$hesap->soyadi;
+$otarih		= date("d.m.Y",strtotime($fonk->datetime()));
+
+$durumagore	= ($ilan_aktifet == 1) ? dil("TX663") : dil("TX664");
+
+$hesapp			= $hesap;
+$adsoyad		= $hesapp->adi;
+$adsoyad		.= ($hesapp->soyadi != '') ? ' '.$hesapp->soyadi : '';
+$adsoyad		= ($hesapp->unvan != '') ? $hesapp->unvan : $adsoyad;
+$fonk->bildirim_gonder(array($adsoyad,$snc->id,$snc->baslik,$durumagore,$otarih),"ilan_olusturuldu",$hesapp->email,$hesapp->telefon);
+
+$db->query("UPDATE sayfalar SET ekleme='1' WHERE site_id_555=999 AND id".$mulidx);
