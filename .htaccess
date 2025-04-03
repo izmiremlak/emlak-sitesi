@@ -1,0 +1,156 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# SEO-friendly URL rewrites
+RewriteRule ^index.html$ index.php [L,QSA]
+RewriteRule ^thumb/(.*)/(.*)$ kucuk.php?size=$1&src=uploads/$2 [L,QSA]
+RewriteRule ^(.*).html$ index.php?p=sayfa&url=$1 [L,QSA]
+RewriteRule ^sitemap.xml$ sitemap.php [L,QSA]
+RewriteRule ^projeler$ index.php?p=projeler [L,QSA]
+RewriteRule ^iletisim$ index.php?p=iletisim [L,QSA]
+RewriteRule ^subeler$ index.php?p=subeler [L,QSA]
+RewriteRule ^yazilar$ index.php?p=yazilar [L,QSA]
+RewriteRule ^haber-ve-duyurular$ index.php?p=haber_ve_duyurular [L,QSA]
+RewriteRule ^emlak-talep-formu$ index.php?p=emlak_talep_formu [L,QSA]
+RewriteRule ^ilanlar$ index.php?p=ilanlar [L,QSA]
+RewriteRule ^uyelik-paketleri$ index.php?p=uyelik_paketleri [L,QSA]
+RewriteRule ^giris$ index.php?p=giris-yap [L,QSA]
+RewriteRule ^hesap-olustur$ index.php?p=hesap-olustur [L,QSA]
+RewriteRule ^girisyap$ index.php?p=giris-yap [L,QSA]
+RewriteRule ^giris-yap$ index.php?p=giris-yap [L,QSA]
+RewriteRule ^uye-paneli$ index.php?p=uye_paneli [L,QSA]
+RewriteRule ^mesajlar$ index.php?p=uye_paneli&rd=mesajlar [L,QSA]
+RewriteRule ^profil/([0-9a-zA-Z-]+)$ index.php?p=profil&how=$1 [L,QSA]
+RewriteRule ^profil/([0-9a-zA-Z-]+)/hakkinda$ index.php?p=profil&how=$1&on=hakkinda [L,QSA]
+RewriteRule ^profil/([0-9a-zA-Z-]+)/danismanlar$ index.php?p=profil&how=$1&on=danismanlar [L,QSA]
+RewriteRule ^profil/([0-9a-zA-Z-]+)/portfoy$ index.php?p=profil&how=$1&on=portfoy [L,QSA]
+RewriteRule ^ilan-olustur$ index.php?p=uye_paneli&rd=ilan_olustur [L,QSA]
+RewriteRule ^aktif-ilanlar$ index.php?p=uye_paneli&rd=aktif_ilanlar [L,QSA]
+RewriteRule ^pasif-ilanlar$ index.php?p=uye_paneli&rd=pasif_ilanlar [L,QSA]
+RewriteRule ^favori-ilanlar$ index.php?p=uye_paneli&rd=favori_ilanlar [L,QSA]
+RewriteRule ^eklenen-danismanlar$ index.php?p=uye_paneli&rd=danismanlar [L,QSA]
+RewriteRule ^odeme-sonuc$ index.php?p=uye_paneli&rd=odeme_sonuc [L,QSA]
+RewriteRule ^odeme-tamamlandi$ index.php?p=uye_paneli&rd=odeme_tamamlandi [L,QSA]
+RewriteRule ^odeme-basarisiz$ index.php?p=uye_paneli&rd=odeme_basarisiz [L,QSA]
+RewriteRule ^dopinglerim$ index.php?p=uye_paneli&rd=dopinglerim [L,QSA]
+RewriteRule ^paketlerim$ index.php?p=uye_paneli&rd=paketlerim [L,QSA]
+RewriteRule ^uyelik-paketi-satinal$ index.php?p=uye_paneli&rd=uyelik_paketi_satinal [L,QSA]
+RewriteRule ^danisman-one-cikar$ index.php?p=uye_paneli&rd=danisman_onecikar [L,QSA]
+RewriteRule ^danismanlar$ index.php?p=danismanlar [L,QSA]
+RewriteRule ^modules/css/stylex.css$ modules/css/stylex.php [L,QSA]
+RewriteRule ^modules/js/dtablelang.json$ dtablelang.php [L,QSA]
+RewriteRule ^rotate/([0-9]+)$ rotate.php?id=$1 [L,QSA]
+
+# Prevent directory listing
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^profil/([0-9a-zA-Z-]+)/([0-9a-zA-Z-\/]+)$ index.php?p=profil&how=$1&on=portfoy&filtre=$2 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([0-9a-zA-Z-\/]+)$ index.php?p=ilanlar&filtre=$1 [L,QSA]
+
+# Gzip compression for better performance
+<ifmodule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
+</ifmodule>
+
+# Caching for better performance
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/gif "access plus 1 weeks"
+    ExpiresByType image/jpg "access plus 1 weeks"
+    ExpiresByType image/jpeg "access plus 1 weeks"
+    ExpiresByType image/png "access plus 1 weeks"
+    ExpiresByType image/bmp "access plus 1 weeks"
+    ExpiresByType text/css "access plus 1 weeks"
+    ExpiresByType application/javascript "access plus 1 weeks"
+    ExpiresByType application/x-javascript "access plus 1 weeks"
+    ExpiresByType text/javascript "access plus 1 weeks"
+</IfModule>
+
+# Keep-alive connection for better performance
+<IfModule mod_headers.c>
+    Header set Connection keep-alive
+</IfModule>
+
+
+# Block bad bots
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_USER_AGENT} ^BlackWidow [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Bot\ mailto:craftbot@yahoo.com [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^ChinaClaw [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Custo [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^DISCo [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Download\ Demon [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^eCatch [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^EirGrabber [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^EmailSiphon [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^EmailWolf [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Express\ WebPictures [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^ExtractorPro [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^EyeNetIE [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^FlashGet [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^GetRight [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^GetWeb! [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Go!Zilla [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Go-Ahead-Got-It [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^GrabNet [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Grafula [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^HMView [OR]
+    RewriteCond %{HTTP_USER_AGENT} HTTrack [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Image\ Stripper [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Image\ Sucker [OR]
+    RewriteCond %{HTTP_USER_AGENT} Indy\ Library [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^InterGET [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Internet\ Ninja [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^JetCar [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^JOC\ Web\ Spider [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^larbin [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^LeechFTP [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Mass\ Downloader [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^MIDown\ tool [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Mister\ PiX [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Navroad [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^NearSite [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^NetAnts [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^NetSpider [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Net\ Vampire [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^NetZIP [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Octopus [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Offline\ Explorer [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Offline\ Navigator [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^PageGrabber [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Papa\ Foto [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^pavuk [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^pcBrowser [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^RealDownload [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^ReGet [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^SiteSnagger [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^SmartDownload [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^SuperBot [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^SuperHTTP [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Surfbot [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^tAkeOut [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Teleport\ Pro [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^VoidEYE [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Web\ Image\ Collector [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Web\ Sucker [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebAuto [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebCopier [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebFetch [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebGo\ IS [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebLeacher [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebReaper [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebSauger [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Website\ eXtractor [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Website\ Quester [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebStripper [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebWhacker [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WebZIP [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Wget [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Widow [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^WWWOFFLE [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Xaldon\ WebSpider [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Zeus
+    RewriteRule .* - [F]
+</IfModule>
